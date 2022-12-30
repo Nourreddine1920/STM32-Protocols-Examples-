@@ -1,0 +1,8 @@
+../Core/Inc/dwt_stm32_delay.h:25:22:DWT_Delay_us	24	static
+../Core/Src/main.c:74:11:receive_data	32	static
+../Core/Src/main.c:68:5:main	24	static
+../Core/Src/main.c:117:7:convert_code	16	static
+../Core/Src/main.c:261:6:SystemClock_Config	88	static
+../Core/Src/main.c:314:13:MX_I2C1_Init	8	static
+../Core/Src/main.c:362:13:MX_GPIO_Init	48	static
+../Core/Src/main.c:408:6:Error_Handler	4	static,ignoring_inline_asm
