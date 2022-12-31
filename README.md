@@ -38,3 +38,16 @@ In Master mode, Slave Select management can be done using two different ways
 
 - Software NSS management : This means that we want to manage the slave using the software. So we don’t have to rely on the physical NSS pin, and instead we can use any pin from the mcu as the Slave Select pin.
 - Hardware NSS management : Here we have to use the actual NSS pin (fixed pin) to control the slave device. The NSS signal is driven low as soon as the SPI is enabled in master mode, and is kept low until the SPI is disabled.
+
+
+##### SPI Configuration ❓
+
+The configuration for the SPI is relatively simpler than what we have seen in other peripherals. Here we only have to modify 1 register. Let’s see the steps to configure the SPI
+
+```
+/************** STEPS TO FOLLOW *****************
+1. Enable SPI clock
+2. Configure the Control Register 1
+3. Configure the CR2
+************************************************/
+```
