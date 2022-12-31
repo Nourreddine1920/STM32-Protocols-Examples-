@@ -19,7 +19,8 @@
 #### ✔ SPI Interface From Scratch 👇
 
 
- 
+##### Introduction 💡
+
 - I will cover both sending and receiving data in the master mode.
  Also I am going to use the ADXL345 for the demonstration
 
@@ -31,3 +32,9 @@
 4. SS Slave select is used to select and unselect the slave
 
 
+##### Slave select (NSS) pin management 🤔
+
+In Master mode, Slave Select management can be done using two different ways
+
+- Software NSS management : This means that we want to manage the slave using the software. So we don’t have to rely on the physical NSS pin, and instead we can use any pin from the mcu as the Slave Select pin.
+- Hardware NSS management : Here we have to use the actual NSS pin (fixed pin) to control the slave device. The NSS signal is driven low as soon as the SPI is enabled in master mode, and is kept low until the SPI is disabled.
