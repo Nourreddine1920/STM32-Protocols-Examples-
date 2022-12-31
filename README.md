@@ -51,3 +51,44 @@ The configuration for the SPI is relatively simpler than what we have seen in ot
 3. Configure the CR2
 ************************************************/
 ```
+
+> SPI Configuration 
+
+```
+void SPIConfig (void)
+{
+  RCC->APB2ENR |= (1<<12);  // Enable SPI1 CLock
+	
+  SPI1->CR1 |= (1<<0)|(1<<1);   // CPOL=1, CPHA=1
+	
+  SPI1->CR1 |= (1<<2);  // Master Mode
+	
+  SPI1->CR1 |= (3<<3);  // BR[2:0] = 011: fPCLK/16, PCLK2 = 80MHz, SPI clk = 5MHz
+	
+  SPI1->CR1 &= ~(1<<7);  // LSBFIRST = 0, MSB first
+	
+  SPI1->CR1 |= (1<<8) | (1<<9);  // SSM=1, SSi=1 -> Software Slave Management
+	
+  SPI1->CR1 &= ~(1<<10);  // RXONLY = 0, full-duplex
+	
+  SPI1->CR1 &= ~(1<<11);  // DFF=0, 8 bit data
+	
+  SPI1->CR2 = 0;
+}
+```
+
+1. First of all enable the SPI 1 clock in the RCC_APB2ENR Register
+2. Now will modify the CPOL and CPHA bits according to the slave requirement ( watch video if you don’t know what this means)
+3. Enable the master mode
+4. Next is the prescalar. The slave device can support upto 5 MBits/s, so I am keeping the presclalar of 16
+This will divide the APB2 clock (80 MHz) by 16, and bring it down to 5MHz
+5. The data format is selected as MSB first
+6. Then we will configure the software slave management. Like I said in the beginning, we will use the software to control the slave, so we need to set these SSM and SSI bits
+7. Next we will configure the full duplex mode by resetting the RXONLY (10th) bit
+8. Next is the data length bit, and we will keep the 8 bit data.
+9. Then reset the entire CR2 register, since we will not be setting up any DMA or Interrupt in this tutorial
+
+
+##### SPI Transmit  ❓
+
+
