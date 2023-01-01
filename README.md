@@ -206,7 +206,6 @@ void GPIOConfig (void)
 
 > The Configuration in F103 is slightly different. F103 do not have the Alternate Function Registers and therefore we have to use the Control Register to configure the SPI pins
 
-Below is the Picture from the F103 Reference manual, suggesting the configuration for the SPI
 
 ```
 void GPIOConfig (void)
@@ -229,5 +228,93 @@ void GPIOConfig (void)
 - We need to set the Alternate Function input mode for the PA6 -> MISO
 - And set the general Output mode for the PA4 -> SS
 
+##### Some Other Function   ❓
+```
+void SPI_Enable (void)
+{
+	SPI1->CR1 |= (1<<6);   // SPE=1, Peripheral enabled
+}
+
+void SPI_Disable (void)
+{
+	SPI1->CR1 &= ~(1<<6);   // SPE=0, Peripheral Disabled
+}
+
+void CS_Enable (void)
+{
+	GPIOA->BSRR |= (1<<9)<<16;
+}
+
+void CS_Disable (void)
+{
+	GPIOA->BSRR |= (1<<9);
+}
+
+
+
+float xg, yg, zg;
+int16_t x,y,z;
+uint8_t RxData[6];
+	
+void adxl_write (uint8_t address, uint8_t value)
+{
+	uint8_t data[2];
+	data[0] = address|0x40;  // multibyte write
+	data[1] = value;
+	CS_Enable ();  // pull the cs pin low
+	SPI_Transmit (data, 2);  // write data to register
+	CS_Disable ();  // pull the cs pin high
+}
+	
+
+void adxl_read (uint8_t address)
+{
+	address |= 0x80;  // read operation
+	address |= 0x40;  // multibyte read
+	uint8_t rec;
+	CS_Enable ();  // pull the pin low
+	SPI_Transmit (&address, 1);  // send address
+	SPI_Receive (RxData, 6);  // receive 6 bytes data
+	CS_Disable ();;  // pull the pin high
+}
+
+void adxl_init (void)
+{
+	adxl_write (0x31, 0x01);  // data_format range= +- 4g
+	adxl_write (0x2d, 0x00);  // reset all bits
+	adxl_write (0x2d, 0x08);  // power_cntl measure and wake up 8hz
+}
+```
+## MAIN FUNCTION 💡
+
+```
+int main ()
+{
+	
+	SysClockConfig ();
+	GPIOConfig ();
+	TIM6Config ();
+	SPIConfig ();
+	
+	SPI_Enable ();
+	
+	adxl_init ();
+	
+	while (1)
+	{
+		adxl_read (0x32);		
+		x = ((RxData[1]<<8)|RxData[0]);
+		y = ((RxData[3]<<8)|RxData[2]);
+		z = ((RxData[5]<<8)|RxData[4]);
+
+	  xg = x*.0078;
+    yg = y*.0078;
+   	zg = z*.0078;
+		
+		Delay_ms (500);
+	}
+	
+}
+```
 
 
