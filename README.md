@@ -129,3 +129,41 @@ data.
 	
 }
 ```
+
+##### SPI Recieve  ❓
+
+>  The receiving process is as follows:
+
+
+- Before receiving the data, we must send some dummy byte to the device. Since the slave device is in the transmission mode, this dummy byte does not change the registers or the data of the registers
+- On receiving the dummy byte, the device transmits one byte of data.
+- This will set the RXNE (Receive Buffer Not Empty) bit. This will indicate that there is some data in the Data Register, which is ready to be read.
+And later we can copy the data from the Data Register into our buffer. This clears the RXNE bit
+
+
+```
+void SPI_Receive (uint8_t *data, int size)
+{
+	/************** STEPS TO FOLLOW *****************
+	1. Wait for the BSY bit to reset in Status Register
+	2. Send some Dummy data before reading the DATA
+	3. Wait for the RXNE bit to Set in the status Register
+	4. Read data from Data Register
+	************************************************/		
+
+	while (size)
+	{
+		while (((SPI1->SR)&(1<<7))) {};  // wait for BSY bit to Reset -> This will indicate that SPI is not busy in communication
+		SPI1->DR = 0;  // send dummy data
+		while (!((SPI1->SR) &(1<<0))){};  // Wait for RXNE to set -> This will indicate that the Rx buffer is not empty
+	  *data++ = (SPI1->DR);
+		size--;
+	}	
+}
+```
+
+- As you can see above, we wait for the busy flag to reset.
+- Then we send some dummy byte to the device. I am transmitting 0
+- next we wait for the RXNE bit to set
+- And finally copy the data from the DR into our buffer
+
