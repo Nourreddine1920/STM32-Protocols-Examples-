@@ -167,3 +167,35 @@ void SPI_Receive (uint8_t *data, int size)
 - next we wait for the RXNE bit to set
 - And finally copy the data from the DR into our buffer
 
+##### GPIO Configuration   ❓
+
+> I am using the following Pins for the SPI 1:
+
+- PA5 -> CLK
+- PA6 -> MISO
+- PA7 -> MOSI
+- PA9 -> Slave Select
+
+The first three pins need to be set in the alternate function mode, and the PA9 will be set as the general output pin.
+
+The Alternate function mode depends on the microcontroller. For example, let’s see the Alternate function description for F446RE
+
+> You can see in the picture above that the SPI 1 is the AF5. Also since I am using Pins PA5, 6 and 7, I am going to use the AFRL Register. In case you are using the Pins 8 to 15, you must use the AFRH register
+
+```
+void GPIOConfig (void)
+{
+	RCC->AHB1ENR |= (1<<0);  // Enable GPIO Clock
+	
+	GPIOA->MODER |= (2<<10)|(2<<12)|(2<<14)|(1<<18);  // Alternate functions for PA5, PA6, PA7 and Output for PA9
+	
+	GPIOA->OSPEEDR |= (3<<10)|(3<<12)|(3<<14)|(3<<18);  // HIGH Speed for PA5, PA6, PA7, PA9
+	
+	GPIOA->AFR[0] |= (5<<20)|(5<<24)|(5<<28);   // AF5(SPI1) for PA5, PA6, PA7
+}
+```
+
+- First we will enable the GPIOA clock
+- Then select the Alternate Function mode for PA5, PA6 and PA7 and the output mode for PA9
+- Next we will set the speed for all four pins. The speed is set to HIGH Speed
+- And finally configure the Alternate Function in the AFR[0] (AFRL)
