@@ -201,7 +201,7 @@ void GPIOConfig (void)
 - And finally configure the Alternate Function in the AFR[0] (AFRL)
 
 
-##### F103 GPIO CONFIG   ❓
+#### F103 GPIO CONFIG   ❓
 
 
 > The Configuration in F103 is slightly different. F103 do not have the Alternate Function Registers and therefore we have to use the Control Register to configure the SPI pins
