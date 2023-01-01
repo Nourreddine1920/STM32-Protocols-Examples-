@@ -199,3 +199,35 @@ void GPIOConfig (void)
 - Then select the Alternate Function mode for PA5, PA6 and PA7 and the output mode for PA9
 - Next we will set the speed for all four pins. The speed is set to HIGH Speed
 - And finally configure the Alternate Function in the AFR[0] (AFRL)
+
+
+##### F103 GPIO CONFIG   ❓
+
+
+> The Configuration in F103 is slightly different. F103 do not have the Alternate Function Registers and therefore we have to use the Control Register to configure the SPI pins
+
+Below is the Picture from the F103 Reference manual, suggesting the configuration for the SPI
+
+```
+void GPIOConfig (void)
+{
+	RCC->APB2ENR |=  (1<<2);  // Enable GPIOA clock
+	
+	GPIOA->CRL = 0;
+	GPIOA->CRL |= (11U<<20);   // PA5 (SCK) AF output Push Pull
+	GPIOA->CRL |= (11U<<28);   // PA7 (MOSI) AF output Push Pull
+	GPIOA->CRL |= (1<<26);    // PA6 (MISO) Input mode (floating)
+	GPIOA->CRL |= (3<<16);    // PA4 used for CS, GPIO Output 
+	
+}
+```
+
+- Here we will enable the GPIOA clock
+- Then reset the entire Control Register
+- Now set the AF output Push Pull mode for PA5 -> Clock
+- Do the Same for the PA7 -> MOSI
+- We need to set the Alternate Function input mode for the PA6 -> MISO
+- And set the general Output mode for the PA4 -> SS
+
+
+
