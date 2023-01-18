@@ -1,0 +1,15 @@
+!SESSION 2023-01-16 20:35:51.518 -----------------------------------------------
+eclipse.buildId=Version 1.9.0
+java.version=11.0.11
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=fr_FR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2023-01-16 20:36:17.293
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2023-01-16 20:36:17.378
+!MESSAGE Log4j initialized with config file C:\Users\starinfo\Documents\STM32 Protcols Examples\I2c-configuration-with-registres\.metadata\.log4j.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2023-01-16 20:36:30.752
+!MESSAGE Started RMI Server, listening on port 41337
